@@ -1,6 +1,6 @@
 {
   "name": "com.fluid.unique-id",
-  "version": "0.0.0",
+  "version": "0.0.0-development",
   "unity": "",
   "displayName": "Fluid Unique ID",
   "description": "A micro-framework for managing unique IDs across scenes",
