@@ -1,0 +1,12 @@
+{
+    "name": "com.fluid.unique-id.Editor",
+    "references": [
+        "com.fluid.unique-id"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
