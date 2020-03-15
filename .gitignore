@@ -39,3 +39,6 @@ sysinfo.txt
 node_modules
 dist
 dist.zip
+
+# Project Specific
+UIElementsSchema

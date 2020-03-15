@@ -1,0 +1,8 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement>
+        <Style src="./UniqueIdError.uss" />
+        <VisualElement class="m-unique-id-error">
+            <TextElement class="m-unique-id-error__text" />
+        </VisualElement>
+    </VisualElement>
+</UXML>
