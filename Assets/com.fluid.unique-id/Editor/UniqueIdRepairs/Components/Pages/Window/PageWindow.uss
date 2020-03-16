@@ -7,7 +7,7 @@
 }
 
 .p-window__buttons {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .p-window__message {

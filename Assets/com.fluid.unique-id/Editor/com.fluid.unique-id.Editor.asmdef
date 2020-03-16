@@ -1,9 +1,7 @@
 {
     "name": "com.fluid.unique-id.Editor",
     "references": [
-        "com.fluid.unique-id",
-        "Unity.Addressables",
-        "Unity.Addressables.Editor"
+        "com.fluid.unique-id"
     ],
     "includePlatforms": [
         "Editor"

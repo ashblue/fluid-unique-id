@@ -2,7 +2,15 @@
     <VisualElement>
         <Style src="./UniqueIdError.uss" />
         <VisualElement class="m-unique-id-error">
-            <TextElement class="m-unique-id-error__text" />
+            <Box class="m-unique-id-error__text-container">
+                <TextElement class="m-unique-id-error__text" />
+            </Box>
+
+            <Button class="m-unique-id-error__fix" text="Fix" />
+
+            <Box class="m-unique-id-error__fix-message">
+                <TextElement text="Fixed" />
+            </Box>
         </VisualElement>
     </VisualElement>
 </UXML>

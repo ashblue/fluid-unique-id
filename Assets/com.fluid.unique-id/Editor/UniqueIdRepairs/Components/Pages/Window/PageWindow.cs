@@ -35,13 +35,30 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
                     if (!idCounts.ContainsKey(r.id)) idCounts[r.id] = 0;
                     idCounts[r.id] += 1;
                 });
+
+                sceneSearch.onFixId += (record) => {
+                    idCounts[record.id] -= 1;
+                    if (idCounts[record.id] > 1) return;
+                    _searchedScenes.ForEach((s) => s.HideId(record.id));
+                };
+
                 _searchedScenes.Add(sceneSearch);
             }
 
-            _searchedScenes.ForEach(s => s.PrintDuplicates(idCounts));
-            EditorSceneManager.OpenScene(startScenePath, OpenSceneMode.Single);
-
             _elSearchText.text = $"Searched {_searchedScenes.Count} scenes";
+
+            _searchedScenes
+                .ToList()
+                .ForEach(s => {
+                    s.PrintDuplicates(idCounts);
+
+                    if (s.ErrorCount == 0) {
+                        _searchedScenes.Remove(s);
+                        s.Remove();
+                    }
+                });
+
+            EditorSceneManager.OpenScene(startScenePath, OpenSceneMode.Single);
         }
 
         private void ClearSearchResults () {
