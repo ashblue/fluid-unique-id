@@ -11,6 +11,8 @@
             <Box class="m-unique-id-error__fix-message">
                 <TextElement text="Fixed" />
             </Box>
+
+            <Button class="m-unique-id-error__show" text="Show" />
         </VisualElement>
     </VisualElement>
 </UXML>

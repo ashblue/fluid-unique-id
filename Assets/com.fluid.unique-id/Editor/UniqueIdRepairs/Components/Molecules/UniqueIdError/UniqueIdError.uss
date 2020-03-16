@@ -9,8 +9,8 @@
     margin: 3px;
 }
 
-.m-unique-id-error.-fixed
-.m-unique-id-error__fix {
+.m-unique-id-error.-fixed .m-unique-id-error__fix,
+.m-unique-id-error.-fixed .m-unique-id-error__show {
     display: none;
 }
 

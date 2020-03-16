@@ -31,26 +31,24 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
                 .Query<UnityEngine.UIElements.Button>(null, "m-unique-id-error__fix")
                 .Last()
                 .clicked += FixId;
+
+            container
+                .Query<UnityEngine.UIElements.Button>(null, "m-unique-id-error__show")
+                .Last()
+                .clicked += ShowId;
         }
 
+        private void ShowId () {
+            if (!ShowScene()) return;
+
+            var result = FindId();
+            Selection.activeObject = result.gameObject;
+        }
 
         private void FixId () {
-            var path = AssetDatabase.GetAssetPath(_record.scene);
-            var prevScene = SceneManager.GetActiveScene();
-            if (path != prevScene.path && !ConfirmSceneChange()) return;
+            if (!ShowScene()) return;
 
-            if (path != prevScene.path) {
-                EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
-            }
-
-            var result = Object
-                .FindObjectsOfType<UniqueId>()
-                .ToList()
-                .Find(uniqueId => {
-                    return uniqueId.name == _record.name && uniqueId.Id == _record.id;
-                });
-
-            Debug.Assert(result != null, "Failed to fix UniqueId");
+            var result = FindId();
             var obj = new SerializedObject(result);
             var idProp = obj.FindProperty("_id");
             idProp.stringValue = Guid.NewGuid().ToString();
@@ -60,6 +58,29 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
 
             MarkFixed();
             _onFixId.Invoke(_record);
+        }
+
+        private UniqueId FindId () {
+            var result = Object
+                .FindObjectsOfType<UniqueId>()
+                .ToList()
+                .Find(uniqueId => { return uniqueId.name == _record.name && uniqueId.Id == _record.id; });
+
+            Debug.Assert(result != null, "Failed to find UniqueId");
+
+            return result;
+        }
+
+        private bool ShowScene () {
+            var path = AssetDatabase.GetAssetPath(_record.scene);
+            var prevScene = SceneManager.GetActiveScene();
+            if (path != prevScene.path && !ConfirmSceneChange()) return false;
+
+            if (path != prevScene.path) {
+                EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            }
+
+            return true;
         }
 
         private bool ConfirmSceneChange () {
