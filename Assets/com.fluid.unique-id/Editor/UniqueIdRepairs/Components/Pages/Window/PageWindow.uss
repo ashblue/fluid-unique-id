@@ -13,3 +13,11 @@
 .p-window__message {
     margin-bottom: 10px;
 }
+
+.p-window__no-errors {
+    display: none;
+}
+
+.p-window__no-errors.-show {
+    display: initial;
+}

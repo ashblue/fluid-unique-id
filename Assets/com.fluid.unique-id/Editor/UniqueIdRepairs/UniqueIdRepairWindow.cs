@@ -6,14 +6,20 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
         private PageWindow _window;
 
         [MenuItem("Window/Fluid/Unique ID Repair")]
-        public static void ShowWindow () {
+        public static UniqueIdRepairWindow ShowWindow () {
             var window = GetWindow<UniqueIdRepairWindow>();
             window.titleContent = new GUIContent("Unique ID Repair");
+
+            return window;
         }
 
         private void OnEnable () {
             var root = rootVisualElement;
             _window = new PageWindow(root);
+        }
+
+        public void Search (string path) {
+            _window.Search(path);
         }
     }
 }

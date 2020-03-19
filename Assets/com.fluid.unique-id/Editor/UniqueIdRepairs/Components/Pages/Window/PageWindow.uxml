@@ -12,6 +12,10 @@
             <VisualElement class="p-window__buttons" name="buttons" />
             <TextElement class="p-window__message" name="search-text" />
             <VisualElement name="search-results" />
+            <TextElement
+                class="test-p-window__no-errors p-window__no-errors"
+                text="No errors found in scenes"
+            />
         </VisualElement>
     </ScrollView>
 </UXML>

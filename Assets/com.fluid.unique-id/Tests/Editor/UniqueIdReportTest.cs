@@ -1,9 +1,5 @@
-using System;
 using NUnit.Framework;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace CleverCrow.Fluid.UniqueIds {
     public class UniqueIdReportTest {
@@ -11,38 +7,19 @@ namespace CleverCrow.Fluid.UniqueIds {
             private UniqueIdReporter _report;
             private string _id;
             private string _scenePath;
+            private SceneGenerator _generator;
 
             private void Setup (int sameIdCount, int sceneCount = 1) {
-                var tmpFolder = Guid.NewGuid().ToString();
-                AssetDatabase.CreateFolder("Assets", tmpFolder);
+                _generator = new SceneGenerator(sameIdCount, sceneCount);
+                _scenePath = _generator.ScenePaths[0];
+                _id = _generator.Id;
 
-                var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene);
-                var container = new GameObject("Container").transform;
-
-                var go = new GameObject("UniqueId");
-                go.transform.SetParent(container);
-                var id = go.AddComponent<UniqueId>();
-                id.PopulateIdIfEmpty();
-                _id = id.Id;
-
-                sameIdCount -= 1;
-                while (sameIdCount > 0) {
-                    Object.Instantiate(id, container);
-                    sameIdCount -= 1;
-                }
-
-                while (sceneCount != 0) {
-                    _scenePath = $"Assets/{tmpFolder}/{sceneCount}.unity";
-                    EditorSceneManager.SaveScene(scene, _scenePath);
-                    sceneCount--;
-                }
-
-                _report = new UniqueIdReporter($"Assets/{tmpFolder}");
+                _report = new UniqueIdReporter(_generator.Path);
             }
 
             [TearDown]
             public void Teardown () {
-                AssetDatabase.DeleteAsset(_report.Path);
+                _generator.Teardown();
             }
 
             public class SingleDuplicate : GetReportMethod {
