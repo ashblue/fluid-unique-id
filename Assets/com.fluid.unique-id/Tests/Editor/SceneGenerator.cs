@@ -23,8 +23,8 @@ namespace CleverCrow.Fluid.UniqueIds {
             var id = go.AddComponent<UniqueId>();
             id.PopulateIdIfEmpty();
             Id = id.Id;
-
             sameIdCount -= 1;
+
             while (sameIdCount > 0) {
                 Object.Instantiate(id, container);
                 sameIdCount -= 1;
@@ -32,7 +32,6 @@ namespace CleverCrow.Fluid.UniqueIds {
 
             while (sceneCount != 0) {
                 var path = $"Assets/{tmpFolder}/{sceneCount}.unity";
-                Debug.Log(path);
                 ScenePaths.Add(path);
                 EditorSceneManager.SaveScene(scene, path);
                 sceneCount--;

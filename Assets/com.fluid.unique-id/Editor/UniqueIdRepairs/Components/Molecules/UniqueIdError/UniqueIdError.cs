@@ -25,7 +25,10 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
 
             _root = container.Query<VisualElement>(null, "m-unique-id-error").Last();
             var elText = container.Query<TextElement>(null, "m-unique-id-error__text").Last();
-            elText.text = $"{record.id}: {record.name}";
+            elText.text = $"{record.id}:";
+
+            var elName = container.Query<TextElement>(null, "m-unique-id-error__name").Last();
+            elName.text = $"{record.name}";
 
             container
                 .Query<UnityEngine.UIElements.Button>(null, "m-unique-id-error__fix")

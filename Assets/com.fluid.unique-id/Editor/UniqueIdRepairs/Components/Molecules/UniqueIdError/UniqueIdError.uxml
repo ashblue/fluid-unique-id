@@ -4,6 +4,7 @@
         <VisualElement class="m-unique-id-error">
             <Box class="m-unique-id-error__text-container">
                 <TextElement class="m-unique-id-error__text" />
+                <TextElement class="m-unique-id-error__name" />
             </Box>
 
             <Button class="m-unique-id-error__fix" text="Fix" />
