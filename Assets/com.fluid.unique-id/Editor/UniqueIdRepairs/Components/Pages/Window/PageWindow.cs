@@ -44,37 +44,26 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
             var startScenePath = SceneManager.GetActiveScene().path;
             ClearSearchResults();
 
-            var idCounts = new Dictionary<string, int>();
-            foreach (var scene in sceneAssets) {
-                var sceneSearch = new SceneSearch(_elSearchResults, scene);
-                sceneSearch.Records.ForEach(r => {
-                    if (!idCounts.ContainsKey(r.id)) idCounts[r.id] = 0;
-                    idCounts[r.id] += 1;
-                });
+            var search = new UniqueIdReporter(sceneAssets);
+            var report = search.GetReport();
+            var duplicateIDs = report.DuplicateIDs;
+            report.Scenes.ForEach((scene) => {
+                if (scene.Errors.Count == 0) return;
 
-                sceneSearch.onFixId += (record) => {
-                    idCounts[record.id] -= 1;
-                    if (idCounts[record.id] > 1) return;
-                    _searchedScenes.ForEach((s) => s.HideId(record.id));
-                };
+                void onFixId (ReportId error) {
+                    if (error.Id == null) return;
+                    duplicateIDs[error.Id] -= 1;
+                    if (duplicateIDs[error.Id] > 1) return;
+                    _searchedScenes.ForEach((s) => s.HideId(error.Id));
+                }
 
+                var sceneSearch = new SceneSearch(_elSearchResults, scene, onFixId);
                 _searchedScenes.Add(sceneSearch);
-            }
+            });
 
-            _elSearchText.text = $"Searched {_searchedScenes.Count} scenes";
+            _elSearchText.text = $"Searched {report.Scenes.Count} scenes";
 
-            _searchedScenes
-                .ToList()
-                .ForEach(s => {
-                    s.PrintDuplicates(idCounts);
-
-                    if (s.ErrorCount == 0) {
-                        _searchedScenes.Remove(s);
-                        s.Remove();
-                    }
-                });
-
-            if (_searchedScenes.Count == 0) {
+            if (report.ErrorCount == 0) {
                 var elNoErrors = _container.Query<VisualElement>(null, "p-window__no-errors").First();
                 elNoErrors.AddToClassList("-show");
             }

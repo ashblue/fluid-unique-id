@@ -7,22 +7,26 @@ using UnityEngine.SceneManagement;
 
 namespace CleverCrow.Fluid.UniqueIds {
     public class UniqueIdReporter {
-        public string Path { get; }
+        private readonly string[] _pathScenes;
 
         public UniqueIdReporter (string path) {
-            Path = path;
+            _pathScenes = AssetDatabase
+                .FindAssets("t:scene", new[] {path})
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .ToArray();
+        }
+
+        public UniqueIdReporter (IEnumerable<SceneAsset> sceneAssets) {
+            _pathScenes = sceneAssets
+                .Select(AssetDatabase.GetAssetPath)
+                .ToArray();
         }
 
         public IdReport GetReport () {
             var idCounter = new Dictionary<string, int>();
             var sceneIds = new Dictionary<string, List<ReportId>>();
 
-            var pathScenes = AssetDatabase
-                .FindAssets("t:scene", new[] {Path})
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .ToArray();
-
-            foreach (var scene in pathScenes) {
+            foreach (var scene in _pathScenes) {
                 if (SceneManager.GetActiveScene().path != scene) {
                     EditorSceneManager.OpenScene(scene, OpenSceneMode.Single);
                 }
@@ -43,7 +47,7 @@ namespace CleverCrow.Fluid.UniqueIds {
 
             var errorCount = 0;
             var scenes = new List<ReportScene>();
-            foreach (var scene in pathScenes) {
+            foreach (var scene in _pathScenes) {
                 var errors = sceneIds[scene]
                     .Where(id => {
                         var isError = id.Id == null || idCounter[id.Id] > 1;
@@ -55,26 +59,28 @@ namespace CleverCrow.Fluid.UniqueIds {
                 scenes.Add(new ReportScene(scene, errors));
             }
 
-            return new IdReport(errorCount, scenes);
+            return new IdReport(errorCount, idCounter, scenes);
         }
     }
 
     public class IdReport {
         public List<ReportScene> Scenes { get; }
         public int ErrorCount { get; }
+        public Dictionary<string, int> DuplicateIDs { get; }
 
-        public IdReport (int errorCount, List<ReportScene> scenes) {
+        public IdReport (int errorCount, Dictionary<string, int> duplicateIDs, List<ReportScene> scenes) {
             ErrorCount = errorCount;
+            DuplicateIDs = duplicateIDs;
             Scenes = scenes;
         }
     }
 
     public class ReportScene {
         public List<ReportId> Errors { get; }
-        public string Name { get; }
+        public string Path { get; }
 
-        public ReportScene (string name, List<ReportId> errors) {
-            Name = name;
+        public ReportScene (string path, List<ReportId> errors) {
+            Path = path;
             Errors = errors;
         }
     }
@@ -90,7 +96,7 @@ namespace CleverCrow.Fluid.UniqueIds {
             Path = GetPath(id.gameObject);
         }
 
-        private static string GetPath (GameObject id) {
+        public static string GetPath (GameObject id) {
             var pathTarget = id.transform;
             var path = $"{pathTarget.name}";
             while (pathTarget.parent != null) {

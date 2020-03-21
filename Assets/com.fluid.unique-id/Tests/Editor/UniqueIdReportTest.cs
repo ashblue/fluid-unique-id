@@ -128,7 +128,7 @@ namespace CleverCrow.Fluid.UniqueIds {
 
                     var result = _report.GetReport();
 
-                    Assert.AreEqual(_scenePath, result.Scenes[0].Name);
+                    Assert.AreEqual(_scenePath, result.Scenes[0].Path);
                 }
             }
         }

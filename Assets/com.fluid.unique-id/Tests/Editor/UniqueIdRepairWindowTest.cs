@@ -11,8 +11,8 @@ namespace CleverCrow.Fluid.UniqueIds {
     public class UniqueIdRepairWindowTest {
         private SceneGenerator _generator;
 
-        private void Setup (int sameIdCount, int sceneCount = 1) {
-            _generator = new SceneGenerator(sameIdCount, sceneCount);
+        private void Setup (int sameIdCount, int sceneCount = 1, int nullIdCount = 0) {
+            _generator = new SceneGenerator(sameIdCount, sceneCount, nullIdCount);
         }
 
         [TearDown]
@@ -21,7 +21,7 @@ namespace CleverCrow.Fluid.UniqueIds {
         }
 
         private static void ClickButton (VisualElement root, string className) {
-            var elView = root.Query<Button>(null, className).First();
+            var elView = GetElement<Button>(root, className);
             var viewClick = elView.clickable;
             var viewInvoke = viewClick
                 .GetType()
@@ -29,6 +29,7 @@ namespace CleverCrow.Fluid.UniqueIds {
                     "Invoke",
                     BindingFlags.NonPublic | BindingFlags.Instance
                 );
+
             viewInvoke.Invoke(viewClick, new object[] {MouseDownEvent.GetPooled()});
         }
 
@@ -38,6 +39,16 @@ namespace CleverCrow.Fluid.UniqueIds {
                 .First()
                 .text;
 
+        }
+
+        private static T GetElement<T> (VisualElement root, string className) where T : VisualElement {
+            var el = root
+                .Query<T>(null, className)
+                .First();
+
+            Debug.Assert(el != null, $"Element {className} not found");
+
+            return el;
         }
 
         public class WhenClickingSearch : UniqueIdRepairWindowTest {
@@ -75,7 +86,7 @@ namespace CleverCrow.Fluid.UniqueIds {
                 window.Search(_generator.Path);
 
                 var root = window.rootVisualElement;
-                var elText = root.Query<TextElement>(null, "test-p-window__no-errors").First();
+                var elText = GetElement<TextElement>(root, "test-p-window__no-errors");
 
                 Assert.IsTrue(elText.ClassListContains("-show"));
             }
@@ -89,7 +100,7 @@ namespace CleverCrow.Fluid.UniqueIds {
                 window = UniqueIdRepairWindow.ShowWindow();
 
                 var root = window.rootVisualElement;
-                var elText = root.Query<TextElement>(null, "test-p-window__no-errors").First();
+                var elText = GetElement<TextElement>(root, "test-p-window__no-errors");
 
                 Assert.IsFalse(elText.ClassListContains("-show"));
             }
@@ -103,7 +114,7 @@ namespace CleverCrow.Fluid.UniqueIds {
                 window.Search(_generator.Path);
 
                 var root = window.rootVisualElement;
-                var el = root.Query<VisualElement>(null, "o-scene-search__results").First();
+                var el = GetElement<VisualElement>(root, "o-scene-search__results");
 
                 Assert.AreEqual(2, el.Children().Count());
             }
@@ -128,18 +139,25 @@ namespace CleverCrow.Fluid.UniqueIds {
         }
 
         public class ClickingFix : UniqueIdRepairWindowTest {
+            private VisualElement _root;
+            private UniqueIdRepairWindow _window;
+
+            private void MethodSetup (int sameIdCount) {
+                Setup(sameIdCount);
+
+                _window = UniqueIdRepairWindow.ShowWindow();
+                _window.Search(_generator.Path);
+
+                _root = _window.rootVisualElement;
+            }
+
             [Test]
             public void It_should_fix_a_duplicate_id () {
-                Setup(2);
+                MethodSetup(2);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
-
-                var root = window.rootVisualElement;
-
-                var corruptId = GetText(root, "m-unique-id-error__name");
-                ClickButton(root, "m-unique-id-error__show");
-                ClickButton(root, "m-unique-id-error__fix");
+                var corruptId = GetText(_root, "m-unique-id-error__text");
+                ClickButton(_root, "m-unique-id-error__show");
+                ClickButton(_root, "m-unique-id-error__fix");
 
                 var uniqueId = (Selection.activeObject as GameObject).GetComponent<UniqueId>();
 
@@ -147,58 +165,99 @@ namespace CleverCrow.Fluid.UniqueIds {
             }
 
             [Test]
+            public void It_should_update_the_display_id () {
+                MethodSetup(2);
+
+                var corruptId = GetText(_root, "m-unique-id-error__text");
+                ClickButton(_root, "m-unique-id-error__fix");
+                var newId = GetText(_root, "m-unique-id-error__text");
+
+                Assert.AreNotEqual(corruptId, newId);
+            }
+
+            [Test]
             public void It_should_mark_the_line_as_fixed () {
-                Setup(2);
+                MethodSetup(2);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
-
-                var root = window.rootVisualElement;
-
-                ClickButton(root, "m-unique-id-error__fix");
-                var elError = root.Query<VisualElement>(null, "m-unique-id-error").First();
+                ClickButton(_root, "m-unique-id-error__fix");
+                var elError = GetElement<VisualElement>(_root, "m-unique-id-error");
 
                 Assert.IsTrue(elError.ClassListContains("-fixed"));
             }
 
             [Test]
             public void It_should_mark_the_sibling_line_as_fixed () {
-                Setup(2);
+                MethodSetup(2);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
-
-                var root = window.rootVisualElement;
-
-                ClickButton(root, "m-unique-id-error__fix");
-                var elError = root.Query<VisualElement>(null, "m-unique-id-error").Last();
+                ClickButton(_root, "m-unique-id-error__fix");
+                var elError = _root.Query<VisualElement>(null, "m-unique-id-error").Last();
 
                 Assert.IsTrue(elError.ClassListContains("-fixed"));
             }
 
             [Test]
             public void It_should_not_mark_a_duplicate_ID_as_fixed_if_there_is_two_or_more_unfixed_lines () {
-                Setup(3);
+                MethodSetup(3);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
-
-                var root = window.rootVisualElement;
-
-                ClickButton(root, "m-unique-id-error__fix");
-                var elError = root.Query<VisualElement>(null, "m-unique-id-error").Last();
+                ClickButton(_root, "m-unique-id-error__fix");
+                var elError = _root.Query<VisualElement>(null, "m-unique-id-error").Last();
 
                 Assert.IsFalse(elError.ClassListContains("-fixed"));
             }
         }
 
-        public class ClickingFixOnNull {
-            public void It_should_fix_a_null_id () {
+        public class ClickingFixOnNullId : UniqueIdRepairWindowTest {
+            private VisualElement _root;
+            private UniqueIdRepairWindow _window;
 
+            private void MethodSetup (int nullIdCount) {
+                Setup(0, 1, nullIdCount);
+
+                _window = UniqueIdRepairWindow.ShowWindow();
+                _window.Search(_generator.Path);
+
+                _root = _window.rootVisualElement;
             }
 
-            public void It_should_not_set_duplicate_null_ID_as_fixed_when_clicking_an_id () {
+            [Test]
+            public void It_should_print_null_as_the_id () {
+                MethodSetup(1);
 
+                var text = GetElement<TextElement>(_root, "m-unique-id-error__text").text;
+
+                Assert.IsTrue(text.Contains("null"));
+            }
+
+            [Test]
+            public void It_should_show_when_clicked () {
+                MethodSetup(1);
+
+                ClickButton(_root, "m-unique-id-error__show");
+                var uniqueId = (Selection.activeObject as GameObject).GetComponent<UniqueId>();
+
+                Assert.IsNotNull(uniqueId.Id);
+            }
+
+            [Test]
+            public void It_should_fix_a_null_id () {
+                MethodSetup(1);
+
+                ClickButton(_root, "m-unique-id-error__show");
+                ClickButton(_root, "m-unique-id-error__fix");
+                var uniqueId = (Selection.activeObject as GameObject).GetComponent<UniqueId>();
+
+                Assert.IsFalse(string.IsNullOrEmpty(uniqueId.Id));
+            }
+
+            [Test]
+            public void It_should_not_set_sibling_id_to_fixed_when_clicking_an_id () {
+                MethodSetup(2);
+
+                ClickButton(_root, "m-unique-id-error__show");
+                ClickButton(_root, "m-unique-id-error__fix");
+                var elError = _root.Query<VisualElement>(null, "m-unique-id-error").Last();
+
+                Assert.IsFalse(elError.ClassListContains("-fixed"));
             }
         }
     }
