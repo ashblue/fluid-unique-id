@@ -1,5 +1,6 @@
+using System;
+using System.Linq;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
@@ -11,11 +12,14 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
             _container = container;
 
             if (_path == null) {
-                _path = new System.Diagnostics.StackTrace(true)
+                var strings = new System.Diagnostics.StackTrace(true)
                     .GetFrame(1)
                     .GetFileName()
                     ?.Replace("\\", "/")
-                    .Replace(Application.dataPath, "Assets")
+                    .Split(new string[] { "/Assets/" }, StringSplitOptions.None)
+                    .ToList();
+
+                _path = $"{AssetPath.BasePath}/{strings[1]}"
                     .Replace(".cs", ".uxml");
             }
 
