@@ -51,72 +51,87 @@ namespace CleverCrow.Fluid.UniqueIds {
             return el;
         }
 
-        public class WhenClickingSearch : UniqueIdRepairWindowTest {
-            [Test]
-            public void It_should_display_a_searched_scene_path () {
-                Setup(2);
+        public class WhenClickingSearch {
+            public class ByDefault : UniqueIdRepairWindowTest {
+                private VisualElement _root;
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
+                private void SetupMethod (int sameIdCount) {
+                    Setup(sameIdCount);
 
-                var root = window.rootVisualElement;
-                var title = GetText(root, "o-scene-search__title");
+                    var window = UniqueIdRepairWindow.ShowWindow();
+                    window.Search(_generator.Path);
 
-                Assert.AreEqual(_generator.ScenePaths[0], title);
+                    _root = window.rootVisualElement;
+                }
+
+                [Test]
+                public void It_should_display_a_searched_scene_path () {
+                    SetupMethod(2);
+
+                    var title = GetText(_root, "o-scene-search__title");
+
+                    Assert.AreEqual(_generator.ScenePaths[0], title);
+                }
+
+                [Test]
+                public void It_should_print_the_number_of_searched_scenes () {
+                    SetupMethod(1);
+
+                    var message = GetText(_root, "p-window__message");
+
+                    Assert.IsTrue(message.Contains("1"));
+                }
+
+                [Test]
+                public void It_should_print_a_message_when_no_errors_are_found () {
+                    SetupMethod(1);
+
+                    var elText = GetElement<TextElement>(_root, "test-p-window__no-errors");
+
+                    Assert.IsTrue(elText.ClassListContains("-show"));
+                }
+
+                [Test]
+                public void It_should_display_the_transform_path_to_the_error_object () {
+                    SetupMethod(2);
+
+                    ClickButton(_root, "m-unique-id-error__show");
+                    var elName = GetElement<TextElement>(_root, "m-unique-id-error__name");
+
+                    var expectedPath = ReportId.GetPath(Selection.activeObject as GameObject);
+
+                    Assert.AreEqual(expectedPath, elName.text);
+                }
             }
 
-            [Test]
-            public void It_should_print_the_number_searched_scenes () {
-                Setup(1);
+            public class WhenClearingResults : UniqueIdRepairWindowTest {
+                [Test]
+                public void It_should_not_print_no_found_error_message_by_default () {
+                    Setup(1);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
+                    var window = UniqueIdRepairWindow.ShowWindow();
+                    window.Close();
+                    window = UniqueIdRepairWindow.ShowWindow();
 
-                var root = window.rootVisualElement;
-                var message = GetText(root, "p-window__message");
+                    var root = window.rootVisualElement;
+                    var elText = GetElement<TextElement>(root, "test-p-window__no-errors");
 
-                Assert.IsTrue(message.Contains("1"));
-            }
+                    Assert.IsFalse(elText.ClassListContains("-show"));
+                }
 
-            [Test]
-            public void It_should_print_a_message_when_no_errors_are_found () {
-                Setup(1);
+                [Test]
+                public void It_should_clear_results_when_clicking_again () {
+                    Setup(2);
 
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
+                    var window = UniqueIdRepairWindow.ShowWindow();
+                    window.Search(_generator.Path);
+                    window.Search(_generator.Path);
 
-                var root = window.rootVisualElement;
-                var elText = GetElement<TextElement>(root, "test-p-window__no-errors");
+                    var root = window.rootVisualElement;
+                    var el = GetElement<VisualElement>(root, "o-scene-search__results");
 
-                Assert.IsTrue(elText.ClassListContains("-show"));
-            }
-
-            [Test]
-            public void It_should_not_print_no_found_error_message_by_default () {
-                Setup(1);
-
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Close();
-                window = UniqueIdRepairWindow.ShowWindow();
-
-                var root = window.rootVisualElement;
-                var elText = GetElement<TextElement>(root, "test-p-window__no-errors");
-
-                Assert.IsFalse(elText.ClassListContains("-show"));
-            }
-
-            [Test]
-            public void It_should_clear_results_when_clicking_again () {
-                Setup(2);
-
-                var window = UniqueIdRepairWindow.ShowWindow();
-                window.Search(_generator.Path);
-                window.Search(_generator.Path);
-
-                var root = window.rootVisualElement;
-                var el = GetElement<VisualElement>(root, "o-scene-search__results");
-
-                Assert.AreEqual(2, el.Children().Count());
+                    Assert.AreEqual(2, el.Children().Count());
+                }
             }
         }
 
@@ -132,9 +147,9 @@ namespace CleverCrow.Fluid.UniqueIds {
 
                 ClickButton(root, "m-unique-id-error__show");
 
-                var name = GetText(root, "m-unique-id-error__name");
+                var id = GetText(root, "m-unique-id-error__text");
 
-                Assert.AreEqual(name, Selection.activeObject.name);
+                Assert.AreEqual(id, (Selection.activeObject as GameObject).GetComponent<UniqueId>().Id);
             }
         }
 

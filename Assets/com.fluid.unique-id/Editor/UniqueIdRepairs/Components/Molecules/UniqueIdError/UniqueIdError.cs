@@ -33,7 +33,7 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
             _elId.text = printText;
 
             var elName = container.Query<TextElement>(null, "m-unique-id-error__name").Last();
-            elName.text = _report.Name;
+            elName.text = _report.Path;
 
             container
                 .Query<UnityEngine.UIElements.Button>(null, "m-unique-id-error__fix")
