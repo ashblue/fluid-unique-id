@@ -1,6 +1,70 @@
+![Fluid Unique ID](images/banner.png)
+
 # Fluid Unique ID
 
-A micro-framework for managing unique IDs across scenes
+Unique ID management for Unity3D projects. A customizable micro-framework for managing consistent unique IDs across multiple scenes on your GameObjects. Built with large projects in mind and tools to prevent ID conflicts. 
+
+* Works with prefabs
+* Visual repair tool included
+* No coding required
+* Easily extendable
+* Heavily tested with TDD and unit tests
+
+## Quickstart
+
+To get started [install](#installation) the package and update it to the latest version. After that simply open a scene and attach the UniqueId component to your desired GameObject. These components are automatically prefab friendly with no extra overhead.
+
+![UniqueId Component](images/unique-id-component.png)
+
+But what if you duplicate this object with the unique ID? It would no longer be unique and things might go haywire when users play. We'll talk about how to fix that in your game next.
+
+### Repair Window
+
+Fluid Unique ID includes a repair window that will scan all of your scene's GameObjects for errors like duplication or `null` values. You can find the repair window in your menu bar at `Window -> Fluid -> Unique ID Repair`.
+
+![Repair Window](images/repair%20window.png)
+
+Please note when clicking search that the repair window uses your current **Project Window** selection. Also it is recommended to not edit scenes until you've addressed all repair window errors. As search takes a snapshot of all scenes and can't detect if you're changing the scene without another search.
+
+### Examples
+
+Clone this project down and see the examples folder to take things for a spin with live code samples.
+
+## Guides
+
+### How To Check For Unique IDs Before Building
+
+The best way to make sure your project doesn't have Unique ID errors before building is to write a simple test. We'll use Unity's internal testing framework with a Unique ID report search. Please note this must be placed in an `Editor` folder to work.
+
+```c#
+public class ExampleVerifyIdTest {
+    [Test]
+    public void It_should_not_have_invalid_IDs_in_the_project () {
+        var reporter = new UniqueIdReporter("Assets/Examples");
+        var report = reporter.GetReport();
+
+        Assert.AreEqual(0, report.ErrorCount);
+    }
+}
+```
+
+Note that you can have build systems like Unity Cloud Build or custom build pipelines run tests automatically. This way you never accidentally check in a broken ID.
+
+### How To Populate Runtime Instances
+
+If you need an ID for runtime instance from a prefab you can call the `UniqueId.PopulateIdIfEmpty()` method since prefabs automatically wipe their ID. This method is recommended to prevent accidentally rewriting a Unique ID.
+
+```c#
+var id = GameObject.Instantiate(myPrefab).GetComponent(UniqueId);
+id.PopulateIdIfEmpty();
+```
+
+If you are spawning instances off of a pre-existing instance with an ID. You can scramble it with the following pattern. Note this is potentially destructive so be careful.
+
+```c#
+var id = GameObject.Instantiate(myPrefab).GetComponent(UniqueId);
+id.ScrambleId();
+```
 
 ## Installation
 
