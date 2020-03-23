@@ -82,7 +82,7 @@ Fluid Unique ID is used through [Unity's Package Manager](https://docs.unity3d.c
     }
   ],
   "dependencies": {
-    "com.fluid.unique-id": "1.0.0"
+    "com.fluid.unique-id": "1.0.1"
   }
 }
 ```
