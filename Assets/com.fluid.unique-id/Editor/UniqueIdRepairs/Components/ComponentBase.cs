@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -12,15 +11,20 @@ namespace CleverCrow.Fluid.UniqueIds.UniqueIdRepairs {
             _container = container;
 
             if (_path == null) {
-                var strings = new System.Diagnostics.StackTrace(true)
+                var path = new System.Diagnostics.StackTrace(true)
                     .GetFrame(1)
                     .GetFileName()
-                    ?.Replace("\\", "/")
-                    .Split(new string[] { "/Assets/" }, StringSplitOptions.None)
-                    .ToList();
+                    ?.Replace("\\", "/");
 
-                _path = $"{AssetPath.BasePath}/{strings[1]}"
-                    .Replace(".cs", ".uxml");
+                if (path.Contains("/PackageCache/")) {
+                    var parts = path.Split(new string[] { "/Editor/" }, StringSplitOptions.None);
+                    _path = $"{AssetPath.BasePath}com.fluid.unique-id/Editor/{parts[1]}"
+                        .Replace(".cs", ".uxml");
+                } else {
+                    var strings = path.Split(new string[] { "/Assets/" }, StringSplitOptions.None);
+                    _path = $"{AssetPath.BasePath}/{strings[1]}"
+                        .Replace(".cs", ".uxml");
+                }
             }
 
             var markup = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(_path);
