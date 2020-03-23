@@ -10,6 +10,10 @@ Unique ID management for Unity3D projects. A customizable micro-framework for ma
 * Easily extendable
 * Heavily tested with TDD and unit tests
 
+**Support**
+
+Join the [Discord Community](https://discord.gg/8QHFfzn) if you have questions or need help.
+
 ## Quickstart
 
 To get started [install](#installation) the package and update it to the latest version. After that simply open a scene and attach the UniqueId component to your desired GameObject. These components are automatically prefab friendly with no extra overhead.
