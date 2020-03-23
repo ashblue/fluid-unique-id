@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ashblue/fluid-unique-id/compare/v1.0.0...v1.0.1) (2020-03-23)
+
+
+### Bug Fixes
+
+* packages no longer crash on import ([b98ece9](https://github.com/ashblue/fluid-unique-id/commit/b98ece987594ad8f88164bffcaa4c1f0dd8cb4e0))
+
 # 1.0.0 (2020-03-22)
 
 
