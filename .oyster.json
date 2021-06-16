@@ -1,0 +1,22 @@
+{
+  "description": "A micro-framework for managing unique IDs across scenes",
+  "displayName": "Fluid Unique ID",
+  "keywords": [
+    "unique id",
+    "unity",
+    "guid"
+  ],
+  "oysterVersion": "2.1.0",
+  "packageName": "com.fluid.unique-id",
+  "packageScope": "com.fluid",
+  "unityVersion": "",
+  "author": {
+    "name": "Ash Blue",
+    "email": "ash@clevercrowgames.com",
+    "url": "https://twitter.com/ashbluewd"
+  },
+  "repo": {
+    "gitUrl": "https://github.com/ashblue/fluid-unique-id",
+    "gitUrlNoHttp": "github.com/ashblue/fluid-unique-id"
+  }
+}
