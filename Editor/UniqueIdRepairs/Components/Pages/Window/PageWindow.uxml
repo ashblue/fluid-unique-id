@@ -1,0 +1,21 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <ScrollView>
+        <VisualElement class="p-window">
+            <Style src="./PageWindow.uss" />
+
+            <Box class="p-window__info">
+                <TextElement
+                    text="Search will use the current cursor placement in the Project window to search for scene(s). Search will be executed as so. Folder (nested scene search), scene (selected scene), none (current scene)."
+                />
+            </Box>
+
+            <VisualElement class="p-window__buttons" name="buttons" />
+            <TextElement class="p-window__message" name="search-text" />
+            <VisualElement name="search-results" />
+            <TextElement
+                class="test-p-window__no-errors p-window__no-errors"
+                text="No errors found in scenes"
+            />
+        </VisualElement>
+    </ScrollView>
+</UXML>

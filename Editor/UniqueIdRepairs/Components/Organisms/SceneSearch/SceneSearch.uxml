@@ -1,0 +1,9 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement>
+        <Style src="./SceneSearch.uss" />
+        <VisualElement class="o-scene-search">
+            <TextElement class="o-scene-search__title" text="test" />
+            <VisualElement class="o-scene-search__results" />
+        </VisualElement>
+    </VisualElement>
+</UXML>

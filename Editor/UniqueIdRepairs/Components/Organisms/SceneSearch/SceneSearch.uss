@@ -1,0 +1,7 @@
+.o-scene-search__title {
+    font-size: 20px;
+}
+
+.o-scene-search__results {
+    margin-bottom: 10px;
+}

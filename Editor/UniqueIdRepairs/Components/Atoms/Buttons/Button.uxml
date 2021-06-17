@@ -1,0 +1,6 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement>
+        <Style src="./Button.uss" />
+        <Button class="a-button" />
+    </VisualElement>
+</UXML>

@@ -1,0 +1,23 @@
+.p-window {
+    margin: 10px;
+}
+
+.p-window__info {
+    padding: 5px;
+}
+
+.p-window__buttons {
+    margin-bottom: 10px;
+}
+
+.p-window__message {
+    margin-bottom: 10px;
+}
+
+.p-window__no-errors {
+    display: none;
+}
+
+.p-window__no-errors.-show {
+    display: initial;
+}
