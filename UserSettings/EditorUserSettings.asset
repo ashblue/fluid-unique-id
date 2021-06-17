@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!162 &1
+EditorUserSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 4
+  m_ConfigSettings:
+    RecentlyUsedScenePath-0:
+      value: 22424703114646590b0d5b711227075d10151d29617c74687b641f31b1e27968e3b560ecb06c3c6f6d57b67355701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-1:
+      value: 224247031146460b5e5d582040770e5d4e4f417b617c72647b644465b7e67961bae267e8b26e6c696a5bb77355701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-2:
+      value: 224247031146460b550f0e751427085d13441b7d617c226728644463e0e2796cb4e561bdbe6d696d3a5aeb7355701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-3:
+      value: 224247031146460c59585b7149710f5d15464f2b617c70617a644465b7b47968e3e365babe396d6f6b07eb7356701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-4:
+      value: 22424703114646030e0a0a72477b095d12154d79617c25677a644465e1b0796fe4b234bcb66b67643b5bb97356701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-5:
+      value: 2242470311464609555d0d2643765c5d42454a2f617c27327d641f63bbb7793ae6e36fbbb76f6f6e3d52ba7356701431fb1e10
+      flags: 0
+    RecentlyUsedScenePath-6:
+      value: 224247031146467e150f01321c264c5f25141d24293b69152039092ad1e33136e7a923e7ee2e26
+      flags: 0
+    RecentlyUsedScenePath-7:
+      value: 224247031146467e150f01321c264c5f25141d24293b6919290a123de4ec3d3bf6c678fce9332b25
+      flags: 0
+    RecentlyUsedScenePath-8:
+      value: 224247031146467e150f01321c264c5f25141d24293b6919290a123de4ec3d3bf6c578fce9332b25
+      flags: 0
+    RecentlyUsedScenePath-9:
+      value: 224247031146467e150f01321c264c5f25141d24293b69152039092ad1e33136e7a767a7f234362820
+      flags: 0
+    vcSharedLogLevel:
+      value: 0d5e400f0650
+      flags: 0
+  m_VCAutomaticAdd: 1
+  m_VCDebugCom: 0
+  m_VCDebugCmd: 0
+  m_VCDebugOut: 0
+  m_SemanticMergeMode: 2
+  m_VCShowFailedCheckout: 1
+  m_VCOverwriteFailedCheckoutAssets: 1
+  m_VCProjectOverlayIcons: 1
+  m_VCHierarchyOverlayIcons: 1
+  m_VCOtherOverlayIcons: 1
+  m_VCAllowAsyncUpdate: 0
