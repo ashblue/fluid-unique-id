@@ -1,12 +1,14 @@
 using System;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
 namespace CleverCrow.Fluid.UniqueIds {
     [CustomEditor(typeof(UniqueId), true)]
     public class UniqueIdEditor : Editor {
-        bool IsPrefab => PrefabUtility.GetPrefabAssetType(target) != PrefabAssetType.NotAPrefab && !IsPrefabInstance;
         bool IsPrefabInstance => PrefabUtility.GetPrefabInstanceStatus(target) != PrefabInstanceStatus.NotAPrefab;
+        private bool IsPrefabStage => PrefabStageUtility.GetCurrentPrefabStage() != null;
+        bool IsPrefab => PrefabUtility.GetPrefabAssetType(target) != PrefabAssetType.NotAPrefab && !IsPrefabInstance || IsPrefabStage;
 
         public override void OnInspectorGUI () {
             base.OnInspectorGUI();
