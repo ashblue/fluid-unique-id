@@ -1,7 +1,26 @@
 {
   "name": "com.fluid.unique-id",
-  "version": "0.0.0",
+  "version": "1.0.2",
   "displayName": "Fluid Unique ID",
   "description": "A micro-framework for managing unique IDs across scenes",
-  "unity": ""
+  "unity": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashblue/fluid-unique-id.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ashblue/fluid-unique-id/issues"
+  },
+  "homepage": "https://github.com/ashblue/fluid-unique-id#readme",
+  "keywords": [
+    "unique id",
+    "unity",
+    "guid"
+  ],
+  "author": {
+    "name": "Ash Blue",
+    "email": "ash@clevercrowgames.com",
+    "url": "https://twitter.com/ashbluewd"
+  }
 }

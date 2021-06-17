@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/ashblue/fluid-unique-id/compare/v1.0.1...v1.0.2) (2021-06-17)
+
+
+### Bug Fixes
+
+* **prefab ids:** prefab window no longer creates new IDs ([7b55451](https://github.com/ashblue/fluid-unique-id/commit/7b55451ed2cec2645d383acbb4fd8ccbba39e303)), closes [#8](https://github.com/ashblue/fluid-unique-id/issues/8)
+
 ## [1.0.1](https://github.com/ashblue/fluid-unique-id/compare/v1.0.0...v1.0.1) (2020-03-23)
 
 
