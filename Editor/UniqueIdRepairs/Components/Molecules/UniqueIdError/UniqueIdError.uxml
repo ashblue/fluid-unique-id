@@ -1,0 +1,19 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement>
+        <Style src="./UniqueIdError.uss" />
+        <VisualElement class="m-unique-id-error">
+            <Box class="m-unique-id-error__text-container">
+                <TextElement class="m-unique-id-error__text" />
+                <TextElement class="m-unique-id-error__name" />
+            </Box>
+
+            <Button class="m-unique-id-error__fix" text="Fix" />
+
+            <Box class="m-unique-id-error__fix-message">
+                <TextElement text="Fixed" />
+            </Box>
+
+            <Button class="m-unique-id-error__show" text="Show" />
+        </VisualElement>
+    </VisualElement>
+</UXML>
